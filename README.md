@@ -2,9 +2,11 @@
 
 A one-page, English-language portfolio with a pink paper background, a layered paper sky, animated rabbits, and inline project case studies. Built with Astro. All fonts and visual assets are self-hosted.
 
-**Refined preview:** http://127.0.0.1:4322/. This is a separate Git repository. The original portfolio remains in the parent directory, with its preview on port 4321.
+**Live portfolio:** https://onewaez.github.io/waez-portfolio-v2/
 
-Deployment is pending the owner's approval of the preview. The prepared GitHub Pages project path is `/waez-portfolio-v2/`; the workflow can only be started manually.
+**Source:** https://github.com/onewaez/waez-portfolio-v2
+
+The approved version is published with GitHub Pages. Updates use a manual deployment workflow. The separate original portfolio remains preserved locally, with its preview on port 4321; this version's local preview uses port 4322.
 
 ## Development
 
@@ -12,7 +14,7 @@ Use Node.js 24 (see `.nvmrc`).
 
 ```sh
 npm ci
-npm run dev
+npm run dev -- --port 4322
 ```
 
 ## Build and verify
@@ -28,7 +30,7 @@ node scripts/verify-scale.mjs
 
 ## Add a project
 
-Create a Markdown file in `src/content/projects/`. Its filename becomes the permanent anchor: `my-project.md` → `/#my-project`.
+Create a Markdown file in `src/content/projects/`. Its filename becomes the permanent anchor: `my-project.md` → `https://onewaez.github.io/waez-portfolio-v2/#my-project`.
 
 ```yaml
 ---
