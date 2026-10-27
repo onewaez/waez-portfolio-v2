@@ -3,7 +3,7 @@ import { satteri } from '@astrojs/markdown-satteri';
 import { projectHeadings } from './scripts/project-headings.mjs';
 
 export default defineConfig({
-  site: 'https://onewaez.github.io',
+  site: 'https://waez.is-a.dev',
   base: process.env.BASE_PATH ?? '/',
   output: 'static',
   trailingSlash: 'always',

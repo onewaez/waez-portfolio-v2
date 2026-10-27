@@ -10,7 +10,7 @@
 
 В **Settings → Pages → Build and deployment → Source** уже выбран **GitHub Actions**. Workflow из `.github/workflows/deploy.yml` запускается только вручную через **Actions → Deploy portfolio to GitHub Pages → Run workflow**. Обычный push не публикует сайт.
 
-Workflow устанавливает зависимости, проверяет проект и собирает сайт с `BASE_PATH=/waez-portfolio-v2/`. Ссылки, шрифты, favicon, canonical и sitemap учитывают этот префикс.
+Workflow устанавливает зависимости, проверяет проект и собирает сайт для корня `waez.is-a.dev` с `BASE_PATH=/`. Канонические ссылки, шрифты, favicon, sitemap и ресурсы рассчитаны на новый домен.
 
 Состояние публикации видно на вкладке **Actions**. Если проверка или сборка завершится ошибкой, новая версия не публикуется: исправьте ошибку из лога, отправьте следующий commit и повторно запустите workflow.
 
@@ -49,7 +49,7 @@ python3 -m http.server 8080 --directory dist --bind 127.0.0.1
 
 Следуйте [официальному руководству is-a.dev для GitHub Pages](https://docs.is-a.dev/guides/github-pages/). В заявке используйте публичную ссылку на сайт и его скриншот. DNS-запись CNAME должна указывать на `onewaez.github.io`, без `/waez-portfolio-v2/`.
 
-После принятия заявки добавьте выданный домен в **Settings → Pages → Custom domain**. Для нового адреса нужно обновить `site`, установить `BASE_PATH: /` в workflow и заново собрать сайт. После выпуска сертификата проверьте **Enforce HTTPS**. До получения домена текущая конфигурация остаётся рассчитанной на GitHub Pages в подпапке.
+Запись `waez.is-a.dev` и TXT-запись проверки уже приняты в `is-a-dev/register`; GitHub подтвердил владение доменом. Теперь в репозитории **onewaez/waez-portfolio-v2 → Settings → Pages → Custom domain** нужно сохранить `waez.is-a.dev`. Подготовленная конфигурация Astro и workflow рассчитана на корень нового домена. После одобрения и публикации дождитесь сертификата GitHub Pages и включите **Enforce HTTPS**, когда этот пункт станет доступен.
 
 ## Новый проект
 

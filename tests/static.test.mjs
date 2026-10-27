@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 const dist = resolve(import.meta.dirname, '../dist');
 const html = await readFile(resolve(dist, 'index.html'), 'utf8');
 const basePath = process.env.BASE_PATH ?? '/';
-const expectedSite = new URL(basePath, 'https://onewaez.github.io');
+const expectedSite = new URL(basePath, 'https://waez.is-a.dev');
 
 test('every local navigation target exists and document IDs are unique', () => {
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
@@ -29,7 +29,7 @@ test('projects contain native, accessible disclosure controls and server-rendere
 test('page metadata and public links are ready for deployment', () => {
   assert.match(html, /<html lang="en"/);
   assert.match(html, /<title>Waez/);
-  assert.match(html, /https:\/\/onewaez\.github\.io\//);
+  assert.match(html, /https:\/\/waez\.is-a\.dev\//);
   assert.ok(html.includes(`rel="canonical" href="${expectedSite.href}"`));
   assert.ok(html.includes(new URL('social-card.jpg', expectedSite).href));
   assert.match(html, /mailto:onewaezwork@gmail\.com/);

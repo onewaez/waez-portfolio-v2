@@ -29,11 +29,11 @@ jobs:
         run: npm run check
       - name: Build static site
         env:
-          BASE_PATH: /waez-portfolio-v2/
+          BASE_PATH: /
         run: npm run build
       - name: Verify static output
         env:
-          BASE_PATH: /waez-portfolio-v2/
+          BASE_PATH: /
         run: npm test
       - name: Configure Pages
         uses: actions/configure-pages@v5
