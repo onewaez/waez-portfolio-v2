@@ -1,8 +1,6 @@
 name: Deploy portfolio to GitHub Pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -30,8 +28,12 @@ jobs:
       - name: Check source
         run: npm run check
       - name: Build static site
+        env:
+          BASE_PATH: /waez-portfolio-v2/
         run: npm run build
       - name: Verify static output
+        env:
+          BASE_PATH: /waez-portfolio-v2/
         run: npm test
       - name: Configure Pages
         uses: actions/configure-pages@v5

@@ -4,6 +4,7 @@ import { projectHeadings } from './scripts/project-headings.mjs';
 
 export default defineConfig({
   site: 'https://onewaez.github.io',
+  base: process.env.BASE_PATH ?? '/',
   output: 'static',
   trailingSlash: 'always',
   build: { format: 'directory' },

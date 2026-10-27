@@ -35,7 +35,7 @@ const serial = String(number).padStart(2, '0');
     <div class="case-study">
       <div class="case-study-heading"><span class="eyebrow">A closer look / {serial}</span><a class="permalink" href={`#${id}`} aria-label={`Permanent link to ${data.title}`}>Link to this project <span aria-hidden="true">↗</span></a></div>
       <div class="prose"><Content /></div>
-      <div class="case-study-end"><a class="text-link" href={data.repository}>View repository <Arrow /></a><button class="close-project" type="button">Close project <span aria-hidden="true">−</span></button></div>
+      <div class="case-study-end"><a class="text-link" href={data.repository}>View repository <Arrow /></a><button class="close-project" type="button" data-js-only hidden>Close project <span aria-hidden="true">−</span></button></div>
     </div>
   </details>
 </article>

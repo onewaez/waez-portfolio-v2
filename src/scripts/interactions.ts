@@ -22,6 +22,7 @@ document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(link => {
 });
 
 document.querySelectorAll<HTMLButtonElement>('.close-project').forEach(button => {
+  button.hidden = false;
   button.addEventListener('click', () => {
     const details = button.closest('details');
     if (!details) return;
@@ -36,9 +37,12 @@ const root = document.documentElement;
 const scenes = [...document.querySelectorAll<HTMLElement>('[data-scroll-scene]')].map(element => ({
   element,
   layers: [...element.querySelectorAll<HTMLElement>('[data-scene-layer]')],
-  rabbits: [...element.querySelectorAll<HTMLElement>('[data-garden-rabbit]')],
+  rabbits: [...element.querySelectorAll<HTMLElement>('[data-garden-rabbit]')].map(rabbit => ({
+    element: rabbit,
+    arrivalDistance: Number(rabbit.dataset.arriveDistance) || 0,
+  })),
 }));
-const motionToggle = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+const motionToggles = [...document.querySelectorAll<HTMLButtonElement>('[data-motion-toggle]')];
 let manuallyPaused = false;
 try { manuallyPaused = localStorage.getItem('waez-motion-paused') === 'true'; } catch { /* Storage is optional. */ }
 let scheduled = false;
@@ -65,8 +69,8 @@ function updateScenes() {
       layer.style.setProperty('--scroll-turn', `${progress * side * depth * 4 * strength}deg`);
     }
     for (const rabbit of scene.rabbits) {
-      const arrival = enabled ? (1 - clamp(progress * 2.8)) * Number.parseFloat(getComputedStyle(rabbit).getPropertyValue('--arrive-distance')) : 0;
-      rabbit.style.setProperty('--rabbit-arrival', `${arrival}px`);
+      const arrival = enabled ? (1 - clamp(progress * 2.8)) * rabbit.arrivalDistance : 0;
+      rabbit.element.style.setProperty('--rabbit-arrival', `${arrival}px`);
     }
   }
   scheduled = false;
@@ -77,20 +81,23 @@ function scheduleScenes() {
 function syncMotionPreference() {
   const paused = motionQuery.matches || manuallyPaused;
   root.dataset.motion = paused ? 'paused' : 'active';
-  if (motionToggle) {
+  for (const motionToggle of motionToggles) {
     motionToggle.hidden = false;
     motionToggle.disabled = motionQuery.matches;
-    motionToggle.textContent = motionQuery.matches ? 'Reduced motion' : paused ? 'Resume motion' : 'Pause motion';
+    const label = motionQuery.matches ? 'Reduced motion' : paused ? 'Resume motion' : 'Pause motion';
+    const labelElement = motionToggle.querySelector('[data-motion-label]');
+    if (labelElement) labelElement.textContent = label;
     motionToggle.setAttribute('aria-pressed', String(paused));
-    motionToggle.setAttribute('aria-label', paused ? 'Resume decorative animations' : 'Pause decorative animations');
+    motionToggle.setAttribute('aria-label', motionQuery.matches ? 'Animations reduced by your system preference' : paused ? 'Resume decorative animations' : 'Pause decorative animations');
+    motionToggle.title = motionQuery.matches ? 'Follows your system reduced motion preference' : label;
   }
   updateScenes();
 }
-motionToggle?.addEventListener('click', () => {
+motionToggles.forEach(button => button.addEventListener('click', () => {
   manuallyPaused = !manuallyPaused;
   try { localStorage.setItem('waez-motion-paused', String(manuallyPaused)); } catch { /* Storage is optional. */ }
   syncMotionPreference();
-});
+}));
 root.classList.add('has-motion');
 syncMotionPreference();
 window.addEventListener('scroll', scheduleScenes, { passive: true });

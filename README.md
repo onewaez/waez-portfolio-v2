@@ -2,7 +2,9 @@
 
 A one-page, English-language portfolio with a pink paper background, a layered paper sky, animated rabbits, and inline project case studies. Built with Astro. All fonts and visual assets are self-hosted.
 
-**Current preview:** http://127.0.0.1:4321/. Deployment is paused while the design is being developed. The intended public address for a future release is https://onewaez.github.io/.
+**Refined preview:** http://127.0.0.1:4322/. This is a separate Git repository. The original portfolio remains in the parent directory, with its preview on port 4321.
+
+Deployment is pending the owner's approval of the preview. The prepared GitHub Pages project path is `/waez-portfolio-v2/`; the workflow can only be started manually.
 
 ## Development
 
@@ -53,7 +55,7 @@ Write the case study below the frontmatter. Describe the problem, your decisions
 - Optional `caption` describes the figure. Optional `demo` adds a link to an externally hosted demo.
 - All case studies stay in the main document, using native `<details>`. Links to project anchors open the corresponding case study when JavaScript is available. With JavaScript off, the visitor can still expand any project manually.
 
-Push to `main` to publish. See [HOSTING.md](HOSTING.md) for GitHub Pages and other hosts.
+Source pushes do not publish the site. After the owner approves the preview, use the manual Pages workflow. See [HOSTING.md](HOSTING.md) for GitHub Pages and other hosts.
 
 ## Identity and styling
 
@@ -70,7 +72,7 @@ The paper texture and clouds are original SVG assets. Fonts use the SIL Open Fon
 
 Clouds float at different depths and part as the page scrolls, with reduced travel on smaller screens. The closing garden has rabbits that breathe, blink, twitch their ears, and make small hops, plus swaying paper flowers. Animations pause when their scene is off screen. Text remains visible throughout scroll transitions.
 
-The footer's **Pause motion** control stops decorative movement and remembers the choice locally. All decorative animation also respects `prefers-reduced-motion`. Keyboard navigation, native disclosures, a skip link, visible focus, and print styles are included.
+The header's pause icon and the footer's **Pause motion** control stay synchronized and remember the choice locally. All decorative animation also respects `prefers-reduced-motion`. Keyboard navigation, native disclosures, a skip link, visible focus, and print styles are included. JavaScript-only controls remain hidden when scripts are unavailable; the native project disclosure still works.
 
 ## Checks
 

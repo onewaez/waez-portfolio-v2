@@ -9,6 +9,7 @@ import ProjectChapter from '../components/ProjectChapter.astro';
 import Arrow from '../components/Arrow.astro';
 import CloudField from '../components/CloudField.astro';
 import RabbitGarden from '../components/RabbitGarden.astro';
+import { basePath, siteUrl } from '../lib/site';
 
 const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 if (new Set(projects.map(project => project.data.order)).size !== projects.length) {
@@ -27,13 +28,13 @@ const description = 'A growing collection of machine learning and data projects 
     <meta name="theme-color" content="#f4c5d4" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="canonical" href="https://onewaez.github.io/" />
+    <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
+    <link rel="canonical" href={siteUrl.href} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content="https://onewaez.github.io/" />
-    <meta property="og:image" content="https://onewaez.github.io/social-card.jpg" />
+    <meta property="og:url" content={siteUrl.href} />
+    <meta property="og:image" content={new URL('social-card.jpg', siteUrl).href} />
     <meta name="twitter:card" content="summary_large_image" />
     <title>{title}</title>
   </head>
@@ -44,11 +45,20 @@ const description = 'A growing collection of machine learning and data projects 
     <div class="page-shell">
       <header class="site-header" id="top">
         <a class="wordmark" href="#top" aria-label="Waez, back to top">w<span class="wordmark-dot">.</span></a>
-        <nav aria-label="Main navigation">
-          <a href="#work">Work <span class="nav-count">{count}</span></a>
-          <a href="#about">About</a>
-          <a href="#contact">Say hello <Arrow /></a>
-        </nav>
+        <div class="header-actions">
+          <nav aria-label="Main navigation">
+            <a href="#work">Work <span class="nav-count">{count}</span></a>
+            <a href="#about">About</a>
+            <a href="#contact">Say hello <Arrow /></a>
+          </nav>
+          <div class="header-motion-slot">
+            <button class="motion-toggle header-motion-toggle" type="button" data-motion-toggle hidden>
+              <svg class="motion-icon-running" width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4v12M13 4v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+              <svg class="motion-icon-paused" width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 4 9 6-9 6V4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
+              <span class="sr-only" data-motion-label>Pause motion</span>
+            </button>
+          </div>
+        </div>
       </header>
 
       <main>
@@ -98,7 +108,7 @@ const description = 'A growing collection of machine learning and data projects 
         <RabbitGarden />
       </main>
 
-      <footer class="site-footer"><span>© {new Date().getUTCFullYear()} Waez</span><span>Made with care & curiosity.</span><button class="motion-toggle" type="button" data-motion-toggle hidden>Pause motion</button><a href="#top">Back to the clouds <Arrow direction="up" /></a></footer>
+      <footer class="site-footer"><span>© {new Date().getUTCFullYear()} Waez</span><span>Made with care & curiosity.</span><button class="motion-toggle" type="button" data-motion-toggle hidden><span data-motion-label>Pause motion</span></button><a href="#top">Back to the clouds <Arrow direction="up" /></a></footer>
     </div>
     <script src="../scripts/interactions.ts"></script>
   </body>
