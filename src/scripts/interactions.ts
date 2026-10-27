@@ -1,5 +1,7 @@
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-const mobileQuery = window.matchMedia('(max-width: 760px)');
+const mobileQuery = window.matchMedia('(max-width: 760px), (hover: none) and (pointer: coarse)');
+const motionPreferenceKey = 'waez-motion-paused';
+const mobileMotionPreferenceKey = 'waez-mobile-motion-enabled';
 
 function openProjectFromHash() {
   let id: string;
@@ -43,8 +45,14 @@ const scenes = [...document.querySelectorAll<HTMLElement>('[data-scroll-scene]')
   })),
 }));
 const motionToggles = [...document.querySelectorAll<HTMLButtonElement>('[data-motion-toggle]')];
-let manuallyPaused = false;
-try { manuallyPaused = localStorage.getItem('waez-motion-paused') === 'true'; } catch { /* Storage is optional. */ }
+function readMotionPreference() {
+  try {
+    return mobileQuery.matches
+      ? localStorage.getItem(mobileMotionPreferenceKey) !== 'true'
+      : localStorage.getItem(motionPreferenceKey) === 'true';
+  } catch { return mobileQuery.matches; }
+}
+let manuallyPaused = readMotionPreference();
 let scheduled = false;
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
@@ -53,13 +61,17 @@ function updateScenes() {
   const viewportHeight = window.innerHeight;
   const scrollableHeight = document.documentElement.scrollHeight - viewportHeight;
   root.style.setProperty('--page-progress', String(scrollableHeight > 0 ? clamp(window.scrollY / scrollableHeight) : 0));
+  if (mobileQuery.matches) {
+    scheduled = false;
+    return;
+  }
   for (const scene of scenes) {
     const rect = scene.element.getBoundingClientRect();
     if (enabled && (rect.top > viewportHeight + 150 || rect.bottom < -150)) continue;
     const progress = scene.element.dataset.scrollScene === 'sky'
       ? clamp(-rect.top / (rect.height * .8))
       : clamp((viewportHeight - rect.top) / (viewportHeight + rect.height));
-    const strength = enabled ? (mobileQuery.matches ? .5 : 1) : 0;
+    const strength = enabled ? 1 : 0;
     scene.element.style.setProperty('--copy-offset', `${-progress * 35 * strength}px`);
     for (const layer of scene.layers) {
       const depth = Number(layer.dataset.depth);
@@ -95,7 +107,9 @@ function syncMotionPreference() {
 }
 motionToggles.forEach(button => button.addEventListener('click', () => {
   manuallyPaused = !manuallyPaused;
-  try { localStorage.setItem('waez-motion-paused', String(manuallyPaused)); } catch { /* Storage is optional. */ }
+  try {
+    localStorage.setItem(mobileQuery.matches ? mobileMotionPreferenceKey : motionPreferenceKey, String(mobileQuery.matches ? !manuallyPaused : manuallyPaused));
+  } catch { /* Storage is optional. */ }
   syncMotionPreference();
 }));
 root.classList.add('has-motion');
@@ -103,7 +117,10 @@ syncMotionPreference();
 window.addEventListener('scroll', scheduleScenes, { passive: true });
 window.addEventListener('resize', scheduleScenes, { passive: true });
 motionQuery.addEventListener('change', syncMotionPreference);
-mobileQuery.addEventListener('change', scheduleScenes);
+mobileQuery.addEventListener('change', () => {
+  manuallyPaused = readMotionPreference();
+  syncMotionPreference();
+});
 new ResizeObserver(scheduleScenes).observe(document.body);
 
 const sceneObserver = new IntersectionObserver(entries => {

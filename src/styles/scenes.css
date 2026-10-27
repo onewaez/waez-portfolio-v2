@@ -91,6 +91,15 @@ html[data-motion='paused'] [data-scroll-reveal] { translate: none; transition: n
   .garden-rabbit-four { left: 87%; width: 100px; }
 }
 
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  .cloud-field .cloud-float { animation: none; }
+  .cloud-field [data-mobile-float] .cloud-float {
+    animation: cloud-drift var(--float-duration) ease-in-out var(--float-delay) infinite;
+    animation-play-state: paused;
+  }
+  .scene-is-visible .cloud-field [data-mobile-float] .cloud-float { animation-play-state: running; }
+}
+
 @media (max-width: 760px) {
   .header-actions { gap: 10px; }
   .header-actions nav { gap: 16px; }
@@ -100,7 +109,6 @@ html[data-motion='paused'] [data-scroll-reveal] { translate: none; transition: n
   .sky-cloud { left: var(--mobile-x); top: var(--mobile-y); width: var(--mobile-width); }
   .cloud-cover .hero-copy { max-width: 100%; }
   .cloud-cover .hero-edition { font-size: 8px; letter-spacing: .13em; margin-bottom: 25px; gap: 7px; }
-  .cloud-cover .tiny-cross { font-size: 17px; }
   .cloud-cover .hero-hello { font-size: 23px; }
   .cloud-cover h1 { font-size: clamp(123px, 31vw, 175px); }
   .cloud-cover .hero-role { font-size: 10px; letter-spacing: .15em; margin-block: 12px 24px; }

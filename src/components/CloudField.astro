@@ -24,7 +24,7 @@ const clouds = [
   <div class="sky-orbit sky-orbit-one"></div><div class="sky-orbit sky-orbit-two"></div>
   <div class="sky-paper-moon"><span></span></div>
   {clouds.map((cloud, i) => (
-    <div class="sky-cloud" data-scene-layer data-depth={cloud.depth} data-side={cloud.side} style={`--cloud-x:${cloud.x}%;--cloud-y:${cloud.y}%;--cloud-width:${cloud.w}%;--mobile-x:${cloud.mx}%;--mobile-y:${cloud.my}%;--mobile-width:${cloud.mw}%;--cloud-tilt:${cloud.tilt}deg;--float-duration:${8 + i % 6}s;--float-delay:${-i * 1.7}s;z-index:${Math.round(cloud.depth * 10)}`}>
+    <div class="sky-cloud" data-scene-layer data-mobile-float={i % 5 === 0 ? 'true' : undefined} data-depth={cloud.depth} data-side={cloud.side} style={`--cloud-x:${cloud.x}%;--cloud-y:${cloud.y}%;--cloud-width:${cloud.w}%;--mobile-x:${cloud.mx}%;--mobile-y:${cloud.my}%;--mobile-width:${cloud.mw}%;--cloud-tilt:${cloud.tilt}deg;--float-duration:${8 + i % 6}s;--float-delay:${-i * 1.7}s;z-index:${Math.round(cloud.depth * 10)}`}>
       <div class="cloud-float"><PaperCloud id={`cover-cloud-${i}`} variant={cloud.variant} /></div>
     </div>
   ))}

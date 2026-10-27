@@ -2,8 +2,7 @@
 
 A one-page, English-language portfolio with a pink paper background, a layered paper sky, animated rabbits, and inline project case studies. Built with Astro. All fonts and visual assets are self-hosted.
 
-**Portfolio domain (setup in progress):** https://waez.is-a.dev/
-**Current published address:** https://onewaez.github.io/waez-portfolio-v2/
+**Live portfolio:** https://waez.is-a.dev/
 
 **Source:** https://github.com/onewaez/waez-portfolio-v2
 
