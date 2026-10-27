@@ -1,0 +1,105 @@
+---
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-500.css';
+import '../styles/global.css';
+import '../styles/scenes.css';
+import { getCollection } from 'astro:content';
+import PaperCloud from '../components/PaperCloud.astro';
+import ProjectChapter from '../components/ProjectChapter.astro';
+import Arrow from '../components/Arrow.astro';
+import CloudField from '../components/CloudField.astro';
+import RabbitGarden from '../components/RabbitGarden.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+if (new Set(projects.map(project => project.data.order)).size !== projects.length) {
+  throw new Error('Published projects must have unique order numbers.');
+}
+const lastProject = projects.at(-1);
+const count = String(projects.length).padStart(2, '0');
+const title = 'Waez — Machine Learning Engineer';
+const description = 'A growing collection of machine learning and data projects by Waez. Explore the code, the decisions, and the things learned along the way.';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4c5d4" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="canonical" href="https://onewaez.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://onewaez.github.io/" />
+    <meta property="og:image" content="https://onewaez.github.io/social-card.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#work">Skip to projects</a>
+    <div class="page-grain" aria-hidden="true"></div>
+    <div class="reading-progress" aria-hidden="true"><span></span></div>
+    <div class="page-shell">
+      <header class="site-header" id="top">
+        <a class="wordmark" href="#top" aria-label="Waez, back to top">w<span class="wordmark-dot">.</span></a>
+        <nav aria-label="Main navigation">
+          <a href="#work">Work <span class="nav-count">{count}</span></a>
+          <a href="#about">About</a>
+          <a href="#contact">Say hello <Arrow /></a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero cloud-cover" aria-labelledby="hero-title" data-scroll-scene="sky">
+          <CloudField />
+          <div class="hero-copy">
+            <p class="eyebrow hero-edition"><span class="tiny-cross" aria-hidden="true">✳</span> A personal portfolio / Vol. 01</p>
+            <p class="hero-hello">Hello, I'm</p>
+            <h1 id="hero-title">Waez<span>.</span></h1>
+            <p class="hero-role">Machine Learning Engineer</p>
+            <p class="hero-description">A closer look at <br />how things <em>learn.</em></p>
+            <div class="hero-links"><a class="text-link" href="https://github.com/onewaez">My GitHub <Arrow /></a><a class="text-link" href="mailto:onewaezwork@gmail.com">Get in touch <Arrow /></a></div>
+          </div>
+
+          <div class="hero-bottom"><a class="scroll-cue" href="#work"><span class="scroll-arrow"><Arrow direction="down" /></span>Scroll to explore</a><p>Experiments, ideas,<br />and things I've built.</p><span class="hero-bottom-index" aria-hidden="true">001 — ∞</span></div>
+        </section>
+
+        <section class="work-section" id="work" aria-label="Selected projects">
+          <div class="work-index" data-scroll-reveal>
+            <PaperCloud id="index-cloud" class="index-cloud" variant="ribbon" />
+            <div class="index-heading"><p class="eyebrow">The collection</p><h2>Small steps.<br /><em>Real discoveries.</em></h2></div>
+            <div class="index-list"><p class="eyebrow">Selected work / {count}</p><ol>{projects.map((project, i) => <li><a href={`#${project.id}`}><span class="index-number">{String(i + 1).padStart(2, '0')}</span><span>{project.data.title}</span><Arrow direction="down" /></a></li>)}</ol>{lastProject && projects.length > 1 && <a class="latest-link" href={`#${lastProject.id}`}>Jump to the latest addition <span aria-hidden="true">↓</span></a>}</div>
+          </div>
+          <div class="projects">{projects.map((project, i) => <ProjectChapter project={project} number={i + 1} />)}</div>
+        </section>
+
+        <section class="about-section" id="about" aria-labelledby="about-title">
+          <div class="about-decoration" aria-hidden="true"><svg viewBox="0 0 1000 300" fill="none"><path d="M-40 171C123 18 323 82 408 178S688 297 839 147S1033 66 1061 80"/><path d="M-40 191C123 38 323 102 408 198S688 317 839 167S1033 86 1061 100"/></svg></div>
+          <PaperCloud id="about-background" class="about-background-cloud" variant="drift" />
+          <div class="about-note" data-scroll-reveal>
+            <span class="note-fold" aria-hidden="true"></span>
+            <p class="eyebrow">A note from the maker</p>
+            <h2 id="about-title">Always<br /><em>looking closer.</em></h2>
+            <p>I'm Waez, a Cyberphysical Systems student exploring machine learning, Python, and the systems that connect them.</p>
+            <p>I like taking an idea apart until I can explain how it works — then building something with what I've learned.</p>
+            <span class="note-signature" aria-label="Signed, Waez">Waez.</span>
+          </div>
+          <div class="about-aside"><span class="eyebrow">On my desk</span><ul><li><span>01</span>Machine learning, from first principles.</li><li><span>02</span>Python and practical experiments.</li><li><span>03</span>Data, databases, and how systems fit together.</li></ul><p>This little corner of the internet<br />grows with every new project.</p><PaperCloud id="about-cloud" class="about-cloud" variant="puff" /></div>
+        </section>
+
+        <section class="contact-section" id="contact" aria-labelledby="contact-title">
+          <div class="contact-cloud" aria-hidden="true"><PaperCloud id="contact-cloud" variant="drift" /></div>
+          <div class="contact-cloud-small" aria-hidden="true"><PaperCloud id="contact-small" variant="ribbon" /></div>
+          <div class="contact-copy" data-scroll-reveal><p class="eyebrow">Good things start with a conversation</p><h2 id="contact-title">Let's talk<span>.</span></h2><a class="contact-email" href="mailto:onewaezwork@gmail.com">onewaezwork@gmail.com <Arrow /></a><p>About machine learning, an opportunity,<br />or a problem worth figuring out.</p></div>
+          <div class="contact-links"><a href="https://github.com/onewaez">GitHub <Arrow /></a><a href="https://t.me/onewaez">Telegram <Arrow /></a></div>
+        </section>
+        <RabbitGarden />
+      </main>
+
+      <footer class="site-footer"><span>© {new Date().getUTCFullYear()} Waez</span><span>Made with care & curiosity.</span><button class="motion-toggle" type="button" data-motion-toggle hidden>Pause motion</button><a href="#top">Back to the clouds <Arrow direction="up" /></a></footer>
+    </div>
+    <script src="../scripts/interactions.ts"></script>
+  </body>
+</html>

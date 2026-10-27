@@ -1,0 +1,41 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Arrow from './Arrow.astro';
+import NetworkDrawing from './NetworkDrawing.astro';
+import PaperCloud from './PaperCloud.astro';
+interface Props { project: CollectionEntry<'projects'>; number: number; }
+const { project, number } = Astro.props;
+const { Content } = await render(project);
+const { data, id } = project;
+const serial = String(number).padStart(2, '0');
+---
+<article class="project-chapter" id={id} data-project>
+  <PaperCloud id={`${id}-margin-cloud`} class="chapter-margin-cloud" variant={number % 2 ? 'puff' : 'drift'} />
+  <div class="project-meta"><span>Chapter {serial}</span><span>{data.category} / {data.year}</span></div>
+  <div class="project-spread" data-scroll-reveal>
+    <div class="project-intro">
+      <span class="chapter-number" aria-hidden="true">{serial}</span>
+      <h2>{data.title}</h2>
+      <p class="project-summary">{data.summary}</p>
+      <ul class="project-stack" aria-label="Technologies">{data.stack.map(item => <li>{item}</li>)}</ul>
+      <a class="text-link" href={data.repository}>Explore the code <Arrow /></a>
+      {data.demo && <a class="text-link demo-link" href={data.demo}>Try the demo <Arrow /></a>}
+    </div>
+    <figure class:list={['project-figure', `presentation-${data.presentation}`]}>
+      <div class="figure-sheet">
+        <span class="paper-pin" aria-hidden="true"></span>
+        {data.presentation === 'network' ? <NetworkDrawing id={id} /> : data.presentation === 'image' ? <img src={data.image} alt={data.imageAlt} loading="lazy" decoding="async" width="1200" height="800" /> : <div class="editorial-cover"><span class="eyebrow">Field note {serial}</span><p>{data.title}</p><span>{data.category}</span></div>}
+      </div>
+      {data.caption && <figcaption><span class="caption-arrow" aria-hidden="true">↳</span>{data.caption}</figcaption>}
+    </figure>
+  </div>
+  <div class="project-contribution"><span class="eyebrow">My part</span><p>{data.contribution}</p></div>
+  <details class="project-details" id={`${id}-details`}>
+    <summary><span>Read project</span><span class="summary-hint">The process, the decisions, the lessons.</span><span class="disclosure-symbol" aria-hidden="true"></span></summary>
+    <div class="case-study">
+      <div class="case-study-heading"><span class="eyebrow">A closer look / {serial}</span><a class="permalink" href={`#${id}`} aria-label={`Permanent link to ${data.title}`}>Link to this project <span aria-hidden="true">↗</span></a></div>
+      <div class="prose"><Content /></div>
+      <div class="case-study-end"><a class="text-link" href={data.repository}>View repository <Arrow /></a><button class="close-project" type="button">Close project <span aria-hidden="true">−</span></button></div>
+    </div>
+  </details>
+</article>

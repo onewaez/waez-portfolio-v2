@@ -1,0 +1,32 @@
+---
+import PaperCloud from './PaperCloud.astro';
+const clouds = [
+  { x: -17, y: -20, w: 49, mx: -51, my: -3, mw: 99, depth: .12, side: -1, variant: 'puff', tilt: -8 },
+  { x: 13, y: -27, w: 44, mx: -4, my: -13, mw: 95, depth: .09, side: -.3, variant: 'cumulus', tilt: 3 },
+  { x: 47, y: -24, w: 49, mx: 50, my: -2, mw: 101, depth: .17, side: 1, variant: 'drift', tilt: 8 },
+  { x: 79, y: -16, w: 38, mx: 86, my: 7, mw: 71, depth: .22, side: 1, variant: 'puff', tilt: -9 },
+  { x: 12, y: -10, w: 40, mx: -8, my: -11, mw: 100, depth: .2, side: -.3, variant: 'cumulus', tilt: 177 },
+  { x: 45, y: -9, w: 42, mx: 39, my: -7, mw: 100, depth: .25, side: .4, variant: 'puff', tilt: 185 },
+  { x: -24, y: 12, w: 45, mx: -66, my: 18, mw: 81, depth: .3, side: -1, variant: 'cumulus', tilt: -16 },
+  { x: 79, y: 14, w: 40, mx: 91, my: 23, mw: 85, depth: .35, side: 1, variant: 'puff', tilt: 11 },
+  { x: -20, y: 38, w: 39, mx: -72, my: 45, mw: 83, depth: .5, side: -1, variant: 'puff', tilt: 12 },
+  { x: 87, y: 40, w: 31, mx: 94, my: 46, mw: 78, depth: .48, side: 1, variant: 'drift', tilt: -12 },
+  { x: -18, y: 63, w: 53, mx: -57, my: 68, mw: 105, depth: .64, side: -1, variant: 'cumulus', tilt: 7 },
+  { x: 60, y: 64, w: 57, mx: 47, my: 73, mw: 116, depth: .68, side: 1, variant: 'drift', tilt: -8 },
+  { x: 12, y: 82, w: 47, mx: -8, my: 85, mw: 111, depth: .8, side: -.5, variant: 'puff', tilt: -5 },
+  { x: -18, y: 88, w: 59, mx: -61, my: 87, mw: 127, depth: .94, side: -1, variant: 'ribbon', tilt: 5 },
+  { x: 53, y: 84, w: 70, mx: 41, my: 88, mw: 145, depth: .9, side: 1, variant: 'cumulus', tilt: -7 },
+  { x: 24, y: -11, w: 19, mx: 18, my: 0, mw: 49, depth: .21, side: -.5, variant: 'ribbon', tilt: -10 },
+  { x: 63, y: 0, w: 20, mx: 66, my: 14, mw: 47, depth: .24, side: .7, variant: 'ribbon', tilt: 4 },
+] as const;
+---
+<div class="cloud-field" aria-hidden="true">
+  <div class="sky-orbit sky-orbit-one"></div><div class="sky-orbit sky-orbit-two"></div>
+  <div class="sky-paper-moon"><span></span></div>
+  {clouds.map((cloud, i) => (
+    <div class="sky-cloud" data-scene-layer data-depth={cloud.depth} data-side={cloud.side} style={`--cloud-x:${cloud.x}%;--cloud-y:${cloud.y}%;--cloud-width:${cloud.w}%;--mobile-x:${cloud.mx}%;--mobile-y:${cloud.my}%;--mobile-width:${cloud.mw}%;--cloud-tilt:${cloud.tilt}deg;--float-duration:${8 + i % 6}s;--float-delay:${-i * 1.7}s;z-index:${Math.round(cloud.depth * 10)}`}>
+      <div class="cloud-float"><PaperCloud id={`cover-cloud-${i}`} variant={cloud.variant} /></div>
+    </div>
+  ))}
+  <svg class="sky-ladder" viewBox="0 0 90 240" fill="none"><path d="M25 222 35 14M60 225 66 18M34 35 65 39M33 61 64 65M32 88 64 92M30 116 63 120M29 144 62 148M28 171 61 176M26 199 60 204"/><path d="M30 222 40 14" class="ladder-highlight"/></svg>
+</div>

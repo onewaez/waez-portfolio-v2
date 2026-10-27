@@ -1,0 +1,25 @@
+---
+interface Props { id: string; class?: string; variant?: 'cumulus' | 'puff' | 'drift' | 'ribbon'; }
+const { id, class: className = '', variant = 'cumulus' } = Astro.props;
+const shapes = {
+  cumulus: 'M100 300C49 305 19 279 22 246C24 216 45 193 77 188C68 149 94 116 133 116C153 67 194 45 240 60C265 17 320 10 357 38C391 15 442 29 457 65C506 58 547 84 552 128C596 120 633 148 632 186C669 194 691 222 682 253C675 282 649 297 613 298L100 300Z',
+  puff: 'M207 304C151 309 111 281 118 241C122 209 146 191 177 194C155 153 181 107 228 109C223 55 264 21 311 32C338-4 392 5 412 49C457 36 501 66 501 111C542 113 570 145 561 180C605 192 621 234 596 266C580 287 546 298 506 300C437 309 278 306 207 304Z',
+  drift: 'M67 265C30 263 17 244 36 225C48 212 69 211 91 213C82 184 109 163 143 172C156 132 198 118 230 138C252 115 286 122 300 147C319 92 376 76 414 111C443 97 481 113 486 144C529 133 557 155 556 184C587 168 618 181 623 204C661 199 694 211 697 232C701 251 677 264 640 263L67 265Z',
+  ribbon: 'M41 252C21 251 17 235 37 225C57 215 84 218 113 220C119 199 148 186 176 197C197 167 232 158 260 177C284 164 308 176 313 197C331 185 349 188 359 197C370 153 414 128 451 150C477 135 508 151 512 180C544 168 576 184 578 208C603 198 628 208 637 220C677 211 708 224 699 241C695 251 675 254 643 254L41 252Z',
+};
+const silhouette = shapes[variant];
+---
+<svg class:list={['paper-cloud', className]} viewBox="0 0 720 370" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id={`${id}-shadow`} x="-30%" y="-35%" width="170%" height="190%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="3" dy="9" stdDeviation="7" flood-color="#693b4b" flood-opacity=".15" />
+    </filter>
+    <filter id={`${id}-soft`} x="-30%" y="-35%" width="170%" height="190%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="5" dy="14" stdDeviation="12" flood-color="#713648" flood-opacity=".13" />
+    </filter>
+  </defs>
+  <g filter={`url(#${id}-soft)`}><path d={silhouette} transform="translate(3 20)" fill="#eee8e3" /></g>
+  <g filter={`url(#${id}-shadow)`}><path d={silhouette} transform="translate(-2 10)" fill="#f7f2ed" /></g>
+  <g filter={`url(#${id}-shadow)`}><path d={silhouette} fill="#fffefa" stroke="#dfd9d2" stroke-width="1" /></g>
+  {variant === 'puff' ? <g stroke="#b7b0a9" stroke-width="1.8" stroke-linecap="round" opacity=".55"><path d="M190 183C174 151 189 123 219 123M239 98C239 62 269 43 300 48"/><path d="M247 95C247 67 269 52 292 53"/></g> : variant === 'cumulus' ? <g stroke="#b7b0a9" stroke-width="1.8" stroke-linecap="round" opacity=".55"><path d="M148 109C171 70 205 65 232 76M152 116C174 79 202 75 226 83M467 84C502 79 531 101 536 130"/></g> : <g stroke="#b7b0a9" stroke-width="1.7" stroke-linecap="round" opacity=".5"><path d={variant === 'drift' ? 'M319 143C337 108 373 97 402 121M325 148C342 118 371 108 395 127' : 'M371 190C384 159 419 144 446 162M377 194C389 168 416 155 440 169'} /></g>}
+</svg>

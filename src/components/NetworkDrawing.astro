@@ -1,0 +1,30 @@
+---
+interface Props { id: string; }
+const { id } = Astro.props;
+const inputY = [100, 132, 164, 196, 228, 260];
+const hiddenY = [116, 154, 192, 230];
+const outputY = [136, 180, 224];
+---
+<svg class="network-drawing" viewBox="0 0 680 420" role="img" aria-labelledby={`${id}-network-title ${id}-network-description`}>
+  <title id={`${id}-network-title`}>Fashion Classifier network architecture</title>
+  <desc id={`${id}-network-description`}>784 image pixel values flow into 128 hidden units with ReLU activation, then into 10 output classes. The drawing shows representative connections, not every neuron.</desc>
+  <defs>
+    <marker id={`${id}-network-arrow`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="m1 1 7 4-7 4" fill="none" stroke="#905d70" stroke-width="1.2" /></marker>
+  </defs>
+  <text x="45" y="40" class="diagram-label">FIG. 01 / INSIDE THE MODEL</text>
+  <text x="635" y="40" text-anchor="end" class="diagram-label">NUMPY</text>
+  <path d="M45 57H635" class="diagram-rule" />
+  <g class="network-lines">
+    {inputY.map(y1 => hiddenY.map(y2 => <path d={`M142 ${y1}C225 ${y1} 245 ${y2} 330 ${y2}`} />))}
+    {hiddenY.map(y1 => outputY.map(y2 => <path d={`M350 ${y1}C435 ${y1} 455 ${y2} 538 ${y2}`} />))}
+  </g>
+  <g class="network-nodes input-nodes">{inputY.map(y => <circle cx="132" cy={y} r="10" />)}</g>
+  <g class="network-nodes hidden-nodes">{hiddenY.map(y => <circle cx="340" cy={y} r="11" />)}</g>
+  <g class="network-nodes output-nodes">{outputY.map(y => <circle cx="550" cy={y} r="12" />)}</g>
+  <g class="diagram-dots"><circle cx="132" cy="283" r="1.5"/><circle cx="132" cy="290" r="1.5"/><circle cx="340" cy="261" r="1.5"/><circle cx="340" cy="268" r="1.5"/><circle cx="550" cy="251" r="1.5"/><circle cx="550" cy="258" r="1.5"/></g>
+  <g class="diagram-numbers"><text x="132" y="329">784</text><text x="340" y="329">128</text><text x="550" y="329">10</text></g>
+  <g class="diagram-captions"><text x="132" y="351">pixel values</text><text x="340" y="351">hidden units · ReLU</text><text x="550" y="351">clothing classes</text></g>
+  <path d="M117 384H563" fill="none" stroke="#905d70" stroke-width="1" marker-end={`url(#${id}-network-arrow)`} />
+  <rect x="261" y="374" width="158" height="18" fill="#fcf6ee" />
+  <text x="340" y="387" text-anchor="middle" class="diagram-label">THE FORWARD PASS</text>
+</svg>
